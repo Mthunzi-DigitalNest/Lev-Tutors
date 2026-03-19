@@ -244,14 +244,14 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
-            <div className="relative rounded-3xl overflow-hidden aspect-[4/5] shadow-xl">
+            <div className="relative rounded-3xl overflow-hidden aspect-4/5 shadow-xl">
               <Image
                 src="/images/about-hero.jpg"
                 alt="Students learning at Lev Learning Hub Centre"
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/30 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-navy/85 via-navy/30 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6 grid grid-cols-2 gap-3">
                 {[
                   { value: '95%', label: 'Improved Results' },
