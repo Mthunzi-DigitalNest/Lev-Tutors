@@ -12,6 +12,7 @@ import {
   Wifi,
   Building2,
   Award,
+  Quote,
 } from 'lucide-react'
 import { buildPageMetadata } from '@/lib/seo'
 
@@ -112,6 +113,8 @@ const testimonials = [
     stars: 5,
   },
 ]
+
+
 
 export default function HomePage() {
   return (
@@ -253,7 +256,7 @@ export default function HomePage() {
               />
               <div className="absolute inset-0 bg-linear-to-t from-navy/85 via-navy/30 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6 grid grid-cols-2 gap-3">
-                {[
+                 {[
                   { value: '95%', label: 'Improved Results' },
                   { value: '4+', label: 'Years of Excellence' },
                 ].map((s) => (
@@ -392,6 +395,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+
     </main>
   )
 }

@@ -1,15 +1,17 @@
-import type { Metadata } from 'next'
+"use client"
+
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, BookOpen, Heart, Lightbulb, Target, Users, Award } from 'lucide-react'
-import { buildPageMetadata } from '@/lib/seo'
+import { ArrowRight, BookOpen, Heart, Lightbulb, Target, Users, Award, X } from 'lucide-react'
+import { useState } from 'react'
 
-export const metadata: Metadata = buildPageMetadata({
-  title: 'About Us',
-  description:
-    'Learn more about Lev Learning Hub Centre, our mission, values, and commitment to personalised academic support for learners across South Africa.',
-  path: '/about',
-})
+type Tutor = {
+  name: string;
+  image: string;
+  quote: string;
+  description: string;
+}
+
 
 const values = [
   {
@@ -50,7 +52,37 @@ const values = [
   },
 ]
 
+const tutors: Tutor[] = [
+  {
+    name: 'Andrew',
+    image: '/images/tutor-andrew.jpg',
+    quote: '“Understanding is power—once you have it, nothing can stop you.”',
+    description: 'Andrew is a highly skilled tutor specializing in Mathematics, Physics, and Life Sciences at both foundational and advanced levels. He has a strong reputation for delivering clarity in complex topics and guiding students toward consistent academic improvement. His approach is structured, disciplined, and focused on excellence, helping students develop deep understanding, sharp problem-solving skills, and the confidence to perform at their best in exams and beyond.'
+  },
+  {
+    name: 'Fazillah',
+    image: '/images/tutor-fazillah.jpg',
+    quote: '“Every child can learn, just not on the same day or in the same way.”',
+    description: 'Fazillah is a passionate and dedicated tutor who brings learning to life through clarity, patience, and encouragement. Specializing in Mathematics and Natural Sciences, she helps young learners build strong foundations, boost confidence, and develop a genuine love for problem-solving and discovery. Her teaching style is engaging, supportive, and tailored to each student’s pace—ensuring no child is left behind.'
+  },
+  {
+    name: 'Owen',
+    image: '/images/tutor-owen.jpg',
+    quote: '“Success in Mathematics and Physics is not about being gifted, but about being consistent.”',
+    description: 'Owen is a focused and results-driven tutor who specializes in Mathematics and Physics for senior students. He is passionate about simplifying complex concepts and helping learners gain clarity, confidence, and academic excellence. With a calm and structured teaching approach, he ensures that every student understands not just how to solve problems, but why they work. Owen is committed to helping students excel in exams, improve their analytical thinking, and unlock their full academic potential.'
+  },
+  {
+    name: 'Tata',
+    image: '/images/tutor-tata.jpg',
+    quote: '“A new language is a new world—learn it, and you expand your life.”',
+    description: 'Tata is a well skilled and passionate language tutor specializing in French, English, and Afrikaans. Dedicated to helping students communicate with confidence, improve their grammar, and develop strong reading and writing skills. With a clear and patient teaching style, Tata makes language learning engaging, practical, and easy to understand. Tata believes that mastering languages opens doors to greater opportunities and empowers students to express themselves effectively in any environment.'
+  },
+]
+
 export default function AboutPage() {
+  const [selectedTutor, setSelectedTutor] = useState<Tutor | null>(null)
+  const handleOpen = (tutor: Tutor) => setSelectedTutor(tutor)
+  const handleClose = () => setSelectedTutor(null)
   return (
     <main>
       {/* Hero */}
@@ -78,6 +110,88 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* --- Our Expert Tutors Section --- */}
+      <section className="py-20 bg-secondary" id="tutors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <p className="text-accent text-sm font-semibold uppercase tracking-widest mb-2">
+              Meet the Team
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground text-balance">
+              Our Expert Tutors
+            </h2>
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Learn from passionate educators dedicated to guiding you toward academic excellence.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {tutors.map((tutor, idx) => (
+              <button
+                key={tutor.name}
+                type="button"
+                onClick={() => handleOpen(tutor)}
+                className={
+                  `border border-border rounded-2xl p-6 text-center flex flex-col items-center hover:shadow-lg transition-all duration-300 group focus:outline-none focus:ring-2 focus:ring-primary ` +
+                  `hover:scale-105 ` +
+                  `animate-fade-in-up` +
+                  (idx % 2 === 0 ? ' delay-100' : ' delay-200')
+                }
+                aria-label={`Learn more about ${tutor.name}`}
+                style={{ animationDelay: `${idx * 80}ms`, backgroundColor: 'rgba(255,255,230,0.6)' }}
+              >
+                {/* Tutor Image with Gradient Border */}
+                <div className="relative w-32 h-32 rounded-full overflow-hidden mb-6 p-1 bg-linear-to-br from-gold/30 to-primary/30 group-hover:from-gold/50 group-hover:to-primary/50 transition-colors flex-none">
+                  <Image
+                    src={tutor.image}
+                    alt={`Tutor ${tutor.name}`}
+                    fill
+                    className="object-cover rounded-full"
+                  />
+                </div>
+                {/* Tutor Name */}
+                <h3 className="font-bold text-foreground text-lg mb-4">{tutor.name}</h3>
+                {/* Favorite Quote with Award Icons */}
+                <div className="relative grow flex items-center">
+                  <Award className="w-8 h-8 text-gold/20 absolute -top-4 -left-4 rotate-180" />
+                  <p className="text-sm text-muted-foreground italic leading-relaxed px-4 pt-2">
+                    {tutor.quote}
+                  </p>
+                  <Award className="w-8 h-8 text-gold/20 absolute -bottom-4 -right-4" />
+                </div>
+              </button>
+            ))}
+          </div>
+          {/* Tutor Modal */}
+          {selectedTutor && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 animate-fade-in">
+              <div className="bg-white dark:bg-card rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in-up">
+                <button
+                  onClick={handleClose}
+                  className="absolute top-4 right-4 text-muted-foreground hover:text-foreground focus:outline-none"
+                  aria-label="Close"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+                <div className="flex flex-col items-center">
+                  <div className="relative w-28 h-28 rounded-full overflow-hidden mb-4 p-1 bg-linear-to-br from-gold/30 to-primary/30">
+                    <Image
+                      src={selectedTutor.image}
+                      alt={`Tutor ${selectedTutor.name}`}
+                      fill
+                      className="object-cover rounded-full"
+                    />
+                  </div>
+                  <h3 className="font-bold text-foreground text-xl mb-2">{selectedTutor.name}</h3>
+                  <p className="text-sm text-muted-foreground italic mb-4 text-center">{selectedTutor.quote}</p>
+                  <p className="text-base text-foreground leading-relaxed text-center">{selectedTutor.description}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+      {/* --- End of Tutors Section --- */}
 
       {/* Introduction */}
       <section className="py-20 bg-background">
@@ -209,33 +323,93 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Values */}
-      <section className="py-20 bg-navy">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <p className="text-gold text-sm font-semibold uppercase tracking-widest mb-2">
-              What Drives Us
-            </p>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-navy-foreground text-balance">
-              Our Core Values
+      {/* Hero */}
+      <section className="relative bg-navy py-24 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/about-hero.jpg"
+            alt="About Lev Learning Hub Centre"
+            fill
+            className="object-cover opacity-20"
+            priority
+          />
+        </div>
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+            About Lev Learning Hub
+          </h1>
+          <p className="text-lg text-white/80 leading-relaxed max-w-2xl mx-auto">
+            We are dedicated to unlocking every learner's potential through personalised support, expert guidance, and a passion for academic excellence.
+          </p>
+        </div>
+      </section>
+
+      {/* WHY CHOOSE US - Highlight Section */}
+      <section className="py-16 bg-blue-50 dark:bg-green-50/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-blue-900 dark:text-green-900 mb-4">
+              Ready to improve your results?
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {values.map((val) => (
-              <div
-                key={val.title}
-                className="bg-navy-foreground/5 border border-navy-foreground/10 rounded-2xl p-6"
-              >
-                <div className="w-10 h-10 bg-gold/15 rounded-xl flex items-center justify-center mb-4">
-                  <val.icon className="w-5 h-5 text-gold" />
-                </div>
-                <h3 className="font-bold text-navy-foreground mb-2">{val.title}</h3>
-                <p className="text-sm text-navy-foreground/70 leading-relaxed">{val.description}</p>
-              </div>
-            ))}
+          <div className="bg-white/80 dark:bg-white/10 rounded-2xl shadow-lg p-8 mb-10">
+            <h3 className="text-2xl font-bold text-primary mb-4 text-center">
+              Helping Students Excel in Maths, Physics & Life Sciences
+            </h3>
+            <p className="text-lg text-muted-foreground text-center mb-6">
+              Clear explanations. Strong understanding. Real results.
+            </p>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <li className="flex items-center gap-3 text-base text-foreground">
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-200 text-green-700 font-bold">✔</span>
+                Personalized teaching
+              </li>
+              <li className="flex items-center gap-3 text-base text-foreground">
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-200 text-green-700 font-bold">✔</span>
+                Patient & clear explanations
+              </li>
+              <li className="flex items-center gap-3 text-base text-foreground">
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-200 text-green-700 font-bold">✔</span>
+                Proven improvement
+              </li>
+              <li className="flex items-center gap-3 text-base text-foreground">
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-200 text-green-700 font-bold">✔</span>
+                Flexible schedule
+              </li>
+            </ul>
+            <div className="text-center">
+              <h4 className="text-xl font-semibold text-blue-900 dark:text-green-900 mb-2 mt-6">
+                RESULTS & IMPACT
+              </h4>
+              <p className="text-base text-muted-foreground mb-4">
+                Many students have improved their understanding, confidence, and performance after joining Lev Tutors Hub.<br />
+                From struggling to confident — results that speak.
+              </p>
+            </div>
+            <div className="mt-8">
+              <h4 className="text-lg font-bold text-primary mb-3 text-center">
+                ⭐ WHY CHOOSE LEV TUTORS HUB?
+              </h4>
+              <ul className="space-y-2 text-base text-foreground max-w-md mx-auto">
+                <li className="flex items-center gap-2"><span className="text-green-600 font-bold">✔</span> Patient and easy-to-understand teaching style</li>
+                <li className="flex items-center gap-2"><span className="text-green-600 font-bold">✔</span> Focus on real academic improvement</li>
+                <li className="flex items-center gap-2"><span className="text-green-600 font-bold">✔</span> Personalized lessons for every student</li>
+                <li className="flex items-center gap-2"><span className="text-green-600 font-bold">✔</span> Support beyond the classroom</li>
+                <li className="flex items-center gap-2"><span className="text-green-600 font-bold">✔</span> Passion for student success</li>
+              </ul>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+              <a href="/register" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-xl font-semibold text-base hover:bg-primary/90 transition-colors">
+                Book a Lesson Now
+              </a>
+              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-green-600 text-white rounded-xl font-semibold text-base hover:bg-green-700 transition-colors">
+                💬 Chat on WhatsApp
+              </a>
+            </div>
           </div>
         </div>
       </section>
+
 
       {/* CTA */}
       <section className="py-20 bg-accent">
