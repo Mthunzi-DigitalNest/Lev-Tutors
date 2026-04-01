@@ -27,13 +27,15 @@ export function SiteFooter() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex w-full items-center justify-center mb-4" aria-label="Lev Tutors Hub – Home">
-              <Image
-                src="/logo.png"
-                alt="Lev Tutors Hub"
-                width={112}
-                height={112}
-                className="h-20 w-20 object-contain"
-              />
+              <span className="inline-flex h-20 w-20 overflow-hidden rounded-full">
+                <Image
+                  src="/logo.png"
+                  alt="Lev Tutors Hub"
+                  width={112}
+                  height={112}
+                  className="h-full w-full object-cover"
+                />
+              </span>
             </Link>
             <p className="text-sm text-navy-foreground/70 leading-relaxed mb-5 text-center">
               Expert tutoring and academic support for learners of all levels. Building bright
@@ -113,6 +115,9 @@ export function SiteFooter() {
                 <div>
                   <a href="tel:+27670279825" className="text-sm text-navy-foreground/70 hover:text-gold transition-colors block business-hover-lift">
                     067 027 9825
+                  </a>
+                  <a href="tel:+27614603297" className="text-sm text-navy-foreground/70 hover:text-gold transition-colors block business-hover-lift">
+                    061 460 3297
                   </a>
                 </div>
               </li>

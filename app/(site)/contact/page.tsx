@@ -55,6 +55,20 @@ export default function ContactPage() {
                 </div>
               </a>
 
+              {/* Phone (Alt) */}
+              <a
+                href="tel:+27614603297"
+                className="flex items-start gap-4 bg-card border border-border rounded-2xl p-5 hover:border-primary/50 hover:shadow-sm transition-all group"
+              >
+                <div className="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-primary/15 transition-colors">
+                  <Phone className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Phone (Alt)</p>
+                  <p className="font-semibold text-foreground group-hover:text-primary transition-colors">061 460 3297</p>
+                </div>
+              </a>
+
               {/* Email */}
               <a
                 href="mailto:info@levlearning.co.za"
@@ -158,7 +172,7 @@ export default function ContactPage() {
                     Speak directly to one of our consultants during business hours.
                   </p>
                   <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary group-hover:gap-2.5 transition-all">
-                    Call 067 027 9825 <ArrowRight className="w-3.5 h-3.5" />
+                    Call 067 027 9825 / 061 460 3297 <ArrowRight className="w-3.5 h-3.5" />
                   </span>
                 </a>
 

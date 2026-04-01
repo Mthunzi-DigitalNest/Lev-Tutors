@@ -18,9 +18,10 @@ const navLinks = [
 export function SiteHeader() {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const headerBgClass = 'bg-primary'
 
   return (
-    <header className="bg-primary shadow-md">
+    <header className={`${headerBgClass} shadow-md`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-1 lg:py-1 min-h-14 lg:min-h-17">
           {/* Logo */}
@@ -29,14 +30,16 @@ export function SiteHeader() {
             className="flex items-center group"
             aria-label="Lev Tutors Hub – Home"
           >
-            <Image
-              src="/logo.png"
-              alt="Lev Tutors Hub"
-              width={112}
-              height={112}
-              className="h-24 w-24 lg:h-28 lg:w-28 object-contain p-1 m-2 logo-float"
-              priority
-            />
+            <span className={`inline-flex h-24 w-24 lg:h-28 lg:w-28 m-2 ${headerBgClass}`}>
+              <Image
+                src="/logo.png"
+                alt="Lev Tutors Hub"
+                width={112}
+                height={112}
+                className="h-full w-full object-contain p-1"
+                priority
+              />
+            </span>
           </Link>
 
           {/* Desktop Nav */}
@@ -82,7 +85,7 @@ export function SiteHeader() {
       {mobileOpen && (
         <div
           id="mobile-menu"
-          className="lg:hidden border-t border-primary-foreground/10 bg-primary px-4 pb-4 pt-2"
+          className={`lg:hidden border-t border-primary-foreground/10 ${headerBgClass} px-4 pb-4 pt-2`}
         >
           <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
             {navLinks.map((link) => (
