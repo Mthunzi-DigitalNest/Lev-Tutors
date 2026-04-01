@@ -31,6 +31,9 @@ const services = [
       'Nurturing young minds with patient, engaging support across all core subjects from Grade 1 to Grade 7.',
     subjects: ['Mathematics', 'English', 'Natural Sciences', 'Social Sciences'],
     href: '/services',
+    bgColor: 'bg-blue-50',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600',
   },
   {
     icon: GraduationCap,
@@ -39,6 +42,9 @@ const services = [
       'Expert guidance for Grade 8–12 learners preparing for tests, exams, and matric finals.',
     subjects: ['Mathematics', 'Physical Sciences', 'Accounting', 'English'],
     href: '/services',
+    bgColor: 'bg-emerald-50',
+    iconBg: 'bg-emerald-100',
+    iconColor: 'text-emerald-600',
   },
   {
     icon: Award,
@@ -47,6 +53,9 @@ const services = [
       'Specialised academic mentoring and tutoring for university and college students.',
     subjects: ['Statistics', 'Economics', 'Research Skills', 'Academic Writing'],
     href: '/services',
+    bgColor: 'bg-amber-50',
+    iconBg: 'bg-amber-100',
+    iconColor: 'text-amber-600',
   },
   {
     icon: Monitor,
@@ -55,6 +64,9 @@ const services = [
       'Practical computer literacy and digital skills training for learners and adults.',
     subjects: ['MS Office Suite', 'Internet Basics', 'Typing Skills', 'Digital Literacy'],
     href: '/services',
+    bgColor: 'bg-purple-50',
+    iconBg: 'bg-purple-100',
+    iconColor: 'text-purple-600',
   },
 ]
 
@@ -185,10 +197,10 @@ export default function HomePage() {
             {services.map((service) => (
               <div
                 key={service.title}
-                className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 group"
+                className={`${service.bgColor} border border-border rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 group`}
               >
-                <div className="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                  <service.icon className="w-5 h-5 text-primary" />
+                <div className={`w-11 h-11 ${service.iconBg} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  <service.icon className={`w-5 h-5 ${service.iconColor}`} />
                 </div>
                 <h3 className="font-bold text-foreground mb-2">{service.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">
@@ -197,14 +209,14 @@ export default function HomePage() {
                 <ul className="space-y-1.5 mb-5">
                   {service.subjects.map((subject) => (
                     <li key={subject} className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                      <span className={`w-1.5 h-1.5 rounded-full ${service.iconBg} shrink-0`} />
                       {subject}
                     </li>
                   ))}
                 </ul>
                 <Link
                   href={service.href}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:gap-2.5 transition-all"
+                  className={`inline-flex items-center gap-1.5 text-sm font-semibold ${service.iconColor} hover:gap-2.5 transition-all`}
                 >
                   Learn more <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
