@@ -29,6 +29,19 @@ const trustPoints = [
   { icon: Star, text: 'Join 500+ students we support' },
 ]
 
+function focusFirstInvalid(container?: HTMLElement | null) {
+  if (!container) return;
+  const invalid = container.querySelector<HTMLElement>(':invalid, .error, [aria-invalid="true"]');
+  if (invalid) { invalid.focus(); return; }
+  const first = container.querySelector<HTMLElement>('input, select, textarea, button, [tabindex]:not([tabindex="-1"])');
+  first?.focus();
+}
+
+function formDataToUrlSearchParams(fd: FormData) {
+  const entries = Array.from(fd.entries()).map(([k, v]) => [k, typeof v === 'string' ? v : (v as File).name]);
+  return new URLSearchParams(entries as any);
+}
+
 export default function RegistrationPage() {
   const router = useRouter()
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([])
@@ -54,15 +67,68 @@ export default function RegistrationPage() {
     )
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!validateCurrentStep()) {
+    // Prevent implicit form submit (e.g. Enter key) before final step.
+    if (currentStep < 4) {
+      handleNextStep()
       return
     }
 
-    setSubmitting(true)
-    await new Promise((r) => setTimeout(r, 800))
-    router.push('/thank-you')
+    if (!validateCurrentStep()) return;
+
+    setSubmitting(true);
+    setStepError('');
+
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+  const getValue = (key: string) => (fd.get(key)?.toString().trim() ?? '');
+
+  fd.set('subjectsNeeded', selectedSubjects.join(', '));
+  fd.set('preferredDays', selectedDays.join(', '));
+
+  // Send aliases so either script field format is supported.
+  fd.set('studentName', getValue('studentFullName'));
+  fd.set('grade', getValue('gradeLevel'));
+  fd.set('learningFormat', getValue('preferredLearningFormat'));
+  fd.set('guardianName', getValue('parentGuardianName'));
+  fd.set('guardianEmail', getValue('emailAddress'));
+  fd.set('guardianPhone', getValue('parentContactNumber'));
+  fd.set('additionalInfo', getValue('additionalNotes'));
+
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxJEVVjupxw2vammMisJ6xV2Wqtb7-pn5YkFu9JkW6zC5PykXAhRpQPI1IeUOPMAZnkfA/exec';
+
+    try {
+      const body = formDataToUrlSearchParams(fd).toString();
+
+      const res = await fetch(scriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body
+      });
+
+      const text = await res.text();
+      let json = null;
+      try { json = JSON.parse(text); } catch (err) { /* not JSON */ }
+
+      if (!res.ok) {
+        const msg = json?.error || `Server error ${res.status}`;
+        throw new Error(msg);
+      }
+
+      if (json?.result === 'success' || res.ok) {
+        router.push('/thank-you');
+        return;
+      }
+
+      throw new Error(json?.error || 'Unknown server response');
+
+    } catch (err: any) {
+      console.error('Submission error:', err);
+      setStepError('Something went wrong. Please try again or contact us directly.');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const openForm = () => {
@@ -74,36 +140,78 @@ export default function RegistrationPage() {
     })
   }
 
-  const validateCurrentStep = () => {
-    const activeRef =
-      currentStep === 1
-        ? studentSectionRef
-        : currentStep === 2
-          ? guardianSectionRef
-          : currentStep === 3
-            ? learningSectionRef
-            : additionalSectionRef
+  const validateCurrentStep = (): boolean => {
+    const activeRef = currentStep === 1 ? studentSectionRef
+      : currentStep === 2 ? guardianSectionRef
+      : currentStep === 3 ? learningSectionRef
+      : additionalSectionRef
 
-    const fields = activeRef.current?.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea')
+    const container = activeRef.current
+    if (!container) return true
 
-    if (fields) {
-      for (const field of fields) {
-        if (field.required && !field.value.trim()) {
-          field.reportValidity()
-          setStepError('Please complete all required fields before continuing.')
+    const controls = Array.from(container.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea'))
+    const isGroupValid = (name: string, type: string) => {
+      const group = container.querySelectorAll<HTMLInputElement>(`input[name="${name}"][type="${type}"]`)
+      return Array.from(group).some((g) => g.checked)
+    }
+
+    for (const field of controls) {
+      const type = (field.getAttribute('type') || '').toLowerCase()
+      if (type === 'hidden') continue
+
+      if ((type === 'checkbox' || type === 'radio') && field.required) {
+        const name = field.name
+        if (name) {
+          if (!isGroupValid(name, type)) {
+            ;(field as HTMLInputElement).setCustomValidity('Please select at least one option.')
+            ;(field as HTMLInputElement).reportValidity()
+            setStepError('Please complete all required fields before continuing.')
+            focusFirstInvalid(container)
+            return false
+          } else {
+            ;(field as HTMLInputElement).setCustomValidity('')
+          }
+        } else {
+          if (!(field as HTMLInputElement).checked) {
+            ;(field as HTMLInputElement).reportValidity()
+            setStepError('Please complete all required fields before continuing.')
+            focusFirstInvalid(container)
+            return false
+          }
+        }
+        continue
+      }
+
+      if (type === 'file' && field.required) {
+        const input = field as HTMLInputElement
+        if (!input.files || input.files.length === 0) {
+          input.reportValidity()
+          setStepError('Please upload the required file.')
+          focusFirstInvalid(container)
           return false
         }
+        continue
+      }
 
-        if (!field.checkValidity()) {
-          field.reportValidity()
-          setStepError('Please correct the highlighted field before continuing.')
-          return false
-        }
+      const value = (field.value || '').toString().trim()
+      if (field.required && value === '') {
+        field.reportValidity()
+        setStepError('Please complete all required fields before continuing.')
+        focusFirstInvalid(container)
+        return false
+      }
+
+      if (!field.checkValidity()) {
+        field.reportValidity()
+        setStepError('Please correct the highlighted field before continuing.')
+        focusFirstInvalid(container)
+        return false
       }
     }
 
     if (currentStep === 3 && selectedSubjects.length === 0) {
       setStepError('Please select at least one subject before continuing.')
+      learningSectionRef.current?.querySelector<HTMLElement>('.subjects-container')?.focus()
       return false
     }
 
@@ -302,6 +410,7 @@ export default function RegistrationPage() {
                         </label>
                         <input
                           type="text"
+                          name="studentFullName"
                           required
                           placeholder="Full name of student"
                           className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -313,6 +422,7 @@ export default function RegistrationPage() {
                         </label>
                         <input
                           type="date"
+                          name="dateOfBirth"
                           required
                           className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
                         />
@@ -326,6 +436,7 @@ export default function RegistrationPage() {
                         </label>
                         <input
                           type="text"
+                          name="schoolName"
                           required
                           placeholder="Current school name"
                           className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -336,6 +447,7 @@ export default function RegistrationPage() {
                           Grade / Level <span className="text-destructive">*</span>
                         </label>
                         <select
+                          name="gradeLevel"
                           required
                           defaultValue=""
                           className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -369,6 +481,7 @@ export default function RegistrationPage() {
                         </label>
                         <input
                           type="text"
+                          name="parentGuardianName"
                           required
                           placeholder="Parent or guardian name"
                           className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -380,6 +493,7 @@ export default function RegistrationPage() {
                         </label>
                         <input
                           type="tel"
+                          name="parentContactNumber"
                           required
                           placeholder="+27 00 000 0000"
                           className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -394,6 +508,7 @@ export default function RegistrationPage() {
                         </label>
                         <input
                           type="tel"
+                          name="alternativeContact"
                           placeholder="Alternative phone number"
                           className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
                         />
@@ -404,6 +519,7 @@ export default function RegistrationPage() {
                         </label>
                         <input
                           type="email"
+                          name="emailAddress"
                           required
                           placeholder="your@email.com"
                           className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -418,6 +534,7 @@ export default function RegistrationPage() {
                         </label>
                         <input
                           type="text"
+                          name="homeAddress"
                           required
                           placeholder="Home address"
                           className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -429,6 +546,7 @@ export default function RegistrationPage() {
                         </label>
                         <input
                           type="text"
+                          name="emergencyContact"
                           placeholder="Name and number"
                           className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
                         />
@@ -450,6 +568,7 @@ export default function RegistrationPage() {
                         Preferred Learning Format <span className="text-destructive">*</span>
                       </label>
                       <select
+                        name="preferredLearningFormat"
                         required
                         defaultValue=""
                         className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -466,14 +585,21 @@ export default function RegistrationPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-foreground mb-2">
+                      <p id="subjects-label" className="block text-sm font-semibold text-foreground mb-2">
                         Subject(s) Needed <span className="text-destructive">*</span>
-                      </label>
-                      <div className="flex flex-wrap gap-2">
+                      </p>
+                      <div
+                        role="group"
+                        aria-labelledby="subjects-label"
+                        aria-required="true"
+                        tabIndex={0}
+                        className="subjects-container flex flex-wrap gap-2 focus:outline-none"
+                      >
                         {subjects.map((s) => (
                           <button
                             key={s}
                             type="button"
+                            aria-pressed={selectedSubjects.includes(s)}
                             onClick={() => toggleSubject(s)}
                             className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                               selectedSubjects.includes(s)
@@ -486,7 +612,7 @@ export default function RegistrationPage() {
                         ))}
                       </div>
                       {selectedSubjects.length > 0 && (
-                        <p className="text-xs text-accent mt-2">
+                        <p className="text-xs text-accent mt-2" aria-live="polite">
                           Selected: {selectedSubjects.join(', ')}
                         </p>
                       )}
@@ -529,6 +655,7 @@ export default function RegistrationPage() {
                         Medical Conditions (if any)
                       </label>
                       <textarea
+                        name="medicalConditions"
                         rows={3}
                         placeholder="Please list any important medical conditions or write 'None'"
                         className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition resize-none"
@@ -540,6 +667,7 @@ export default function RegistrationPage() {
                         Additional Notes
                       </label>
                       <textarea
+                        name="additionalNotes"
                         rows={4}
                         placeholder="Any other information we should know — specific struggles, goals, urgency, etc."
                         className="w-full px-4 py-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition resize-none"
@@ -548,7 +676,7 @@ export default function RegistrationPage() {
                   </section>
 
                   {stepError && (
-                    <p className="text-sm text-destructive font-medium">{stepError}</p>
+                    <p id="registration-step-error" role="status" aria-live="polite" className="text-sm text-destructive font-medium">{stepError}</p>
                   )}
 
                   <div className="pt-2 flex flex-col sm:flex-row gap-3">
