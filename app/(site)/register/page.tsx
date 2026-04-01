@@ -55,6 +55,7 @@ export default function RegistrationPage() {
   const guardianSectionRef = useRef<HTMLElement>(null)
   const learningSectionRef = useRef<HTMLElement>(null)
   const additionalSectionRef = useRef<HTMLElement>(null)
+  const submitIntentRef = useRef(false)
 
   const toggleSubject = (s: string) =>
     setSelectedSubjects((prev) =>
@@ -74,6 +75,12 @@ export default function RegistrationPage() {
       handleNextStep()
       return
     }
+
+    // Allow submit only when user explicitly clicks the submit button.
+    if (!submitIntentRef.current) {
+      return
+    }
+    submitIntentRef.current = false
 
     if (!validateCurrentStep()) return;
 
@@ -238,6 +245,23 @@ export default function RegistrationPage() {
     })
   }
 
+  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key !== 'Enter') {
+      return
+    }
+
+    const target = e.target as HTMLElement
+    const isTextarea = target.tagName === 'TEXTAREA'
+    if (isTextarea) {
+      return
+    }
+
+    e.preventDefault()
+    if (currentStep < 4) {
+      handleNextStep()
+    }
+  }
+
   return (
     <main>
       <section className="relative bg-navy py-20 sm:py-24 overflow-hidden">
@@ -393,7 +417,7 @@ export default function RegistrationPage() {
                   <p className="mt-2 text-xs font-medium text-muted-foreground">Step {currentStep} of 4</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown} className="space-y-8">
                   <section
                     ref={studentSectionRef}
                     className={`space-y-4 rounded-xl border border-border bg-secondary/40 p-5 sm:p-6 ${
@@ -701,6 +725,9 @@ export default function RegistrationPage() {
                     ) : (
                       <button
                         type="submit"
+                        onClick={() => {
+                          submitIntentRef.current = true
+                        }}
                         disabled={submitting}
                         className="w-full py-4 bg-primary text-primary-foreground rounded-xl font-semibold text-base hover:bg-primary/90 disabled:opacity-70 transition-colors"
                       >
