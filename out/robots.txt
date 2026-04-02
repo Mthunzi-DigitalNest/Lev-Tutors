@@ -1,7 +1,4 @@
 User-Agent: *
 Allow: /
-Disallow: /thank-you
-Disallow: /quote
 
-Host: https://levlearning.co.za
 Sitemap: https://levlearning.co.za/sitemap.xml
