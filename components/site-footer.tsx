@@ -7,6 +7,7 @@ const quickLinks = [
   { label: 'About Us', href: '/about' },
   { label: 'Services', href: '/services' },
   { label: 'Learning Formats', href: '/learning-formats' },
+  { label: 'Pricing', href: '/pricing' },
   { label: 'Register Now', href: '/register' },
   { label: 'Contact Us', href: '/contact' },
 ]
