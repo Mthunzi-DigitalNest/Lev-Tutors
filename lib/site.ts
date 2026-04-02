@@ -3,7 +3,7 @@ export const siteConfig = {
   shortName: 'Lev Learning Hub',
   description:
     'Lev Learning Hub Centre offers professional tutoring for primary school, high school, varsity students, and computer skills training with centre-based, home-to-home, and online learning options.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://levlearning.co.za',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://levtutors.co.za',
   locale: 'en_ZA',
   email: 'info@levlearning.co.za',
   phone: '+27670279825',
