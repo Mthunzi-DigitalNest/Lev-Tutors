@@ -12,7 +12,6 @@ import {
   Wifi,
   Building2,
   Award,
-  Quote,
 } from 'lucide-react'
 import { buildPageMetadata } from '@/lib/seo'
 
@@ -126,7 +125,7 @@ const testimonials = [
   },
 ]
 
-
+const aboutHeroImage = '/images/about-hero.jpg'
 
 export default function HomePage() {
   return (
@@ -259,9 +258,9 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
-            <div className="relative rounded-3xl overflow-hidden aspect-4/5 shadow-xl">
+            <div className="relative rounded-3xl overflow-hidden aspect-[4/5] shadow-xl">
               <Image
-                src="/images/about-hero.jpg"
+                src={aboutHeroImage}
                 alt="Students learning at Lev Learning Hub Centre"
                 fill
                 className="object-cover"
