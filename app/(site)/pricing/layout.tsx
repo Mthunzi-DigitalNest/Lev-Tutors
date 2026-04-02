@@ -3,15 +3,11 @@ import { buildPageMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = {
   ...buildPageMetadata({
-    title: 'Student Registration',
+    title: 'Pricing',
     description:
-      'Legacy registration route for Lev Learning Hub Centre. This page redirects to the current student registration page.',
-    path: '/quote',
+      'View our transparent and affordable tutoring rates for students in Pretoria.',
+    path: '/pricing',
   }),
-  robots: {
-    index: false,
-    follow: false,
-  },
 }
 
 export default function QuoteLayout({ children }: { children: React.ReactNode }) {
