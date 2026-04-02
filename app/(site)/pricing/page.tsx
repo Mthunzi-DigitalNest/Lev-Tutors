@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import { CheckCircle, ArrowRight, HelpCircle } from 'lucide-react'
+import { ArrowRight, HelpCircle } from 'lucide-react'
 import { buildPageMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildPageMetadata({
@@ -36,9 +36,43 @@ const computerProgram = [
   { program: 'Monthly Fee', details: 'R550' },
 ]
 
+const pricingJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'OfferCatalog',
+  name: 'Lev Learning Hub Centre Pricing 2026',
+  itemListElement: [
+    ...monthlyFees.map((row) => ({
+      '@type': 'Offer',
+      name: `${row.grade} Monthly Tutoring`,
+      price: row.fee.replace(/[^\d]/g, ''),
+      priceCurrency: 'ZAR',
+      category: 'Monthly Fees',
+    })),
+    ...flexibleOptions.map((row) => ({
+      '@type': 'Offer',
+      name: row.option,
+      price: row.price.replace(/[^\d]/g, ''),
+      priceCurrency: 'ZAR',
+      category: 'Flexible Learning Options',
+    })),
+    {
+      '@type': 'Offer',
+      name: 'Computer Lessons Monthly Fee',
+      price: '550',
+      priceCurrency: 'ZAR',
+      category: 'Computer Lessons Program',
+    },
+  ],
+}
+
 export default function PricingPage() {
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd) }}
+      />
+
       {/* Hero Section */}
       <section className="relative bg-navy py-24 overflow-hidden">
         <div className="absolute inset-0">
@@ -46,6 +80,8 @@ export default function PricingPage() {
             src="/images/hero-bg.jpg"
             alt="Lev Learning Hub Centre pricing"
             fill
+            priority
+            sizes="100vw"
             className="object-cover opacity-15"
           />
         </div>
@@ -73,6 +109,9 @@ export default function PricingPage() {
             <h2 className="font-serif text-2xl font-bold text-primary mb-6">Monthly Fees</h2>
             <div className="rounded-2xl overflow-hidden border border-border shadow-sm">
               <table className="w-full text-sm">
+                <caption className="sr-only">
+                  Monthly tutoring fees by grade for 2026
+                </caption>
                 <thead>
                   <tr className="bg-primary text-primary-foreground">
                     <th className="py-4 px-6 text-left font-semibold">Grade</th>
@@ -99,6 +138,9 @@ export default function PricingPage() {
             <h2 className="font-serif text-2xl font-bold text-emerald-600 mb-6">Flexible Learning Options</h2>
             <div className="rounded-2xl overflow-hidden border border-border shadow-sm">
               <table className="w-full text-sm">
+                <caption className="sr-only">
+                  Flexible learning option prices
+                </caption>
                 <thead>
                   <tr className="bg-emerald-600 text-white">
                     <th className="py-4 px-6 text-left font-semibold">Option</th>
@@ -125,6 +167,9 @@ export default function PricingPage() {
             <h2 className="font-serif text-2xl font-bold text-amber-600 mb-6">Computer Lessons Program</h2>
             <div className="rounded-2xl overflow-hidden border border-border shadow-sm">
               <table className="w-full text-sm">
+                <caption className="sr-only">
+                  Computer lessons program schedule and monthly fee
+                </caption>
                 <thead>
                   <tr className="bg-amber-400 text-amber-900">
                     <th className="py-4 px-6 text-left font-semibold">Program</th>
