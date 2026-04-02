@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Twitter } from 'lucide-react'
+import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from 'lucide-react'
 
 const quickLinks = [
   { label: 'Home', href: '/' },
@@ -43,25 +43,25 @@ export function SiteFooter() {
             </p>
             <div className="flex items-center justify-center gap-3">
               <a
-                href="#"
+                href="https://www.facebook.com/share/18S1HPv9No/?mibextid=wwXIfr"
                 aria-label="Facebook"
                 className="w-8 h-8 rounded-lg bg-navy-foreground/10 hover:bg-gold/20 flex items-center justify-center transition-colors business-hover-lift"
               >
                 <Facebook className="w-4 h-4 text-navy-foreground/70" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/lev_tutors_?igsh=MWo0dGgyZG96cWk0cg%3D%3D&utm_source=qr"
                 aria-label="Instagram"
                 className="w-8 h-8 rounded-lg bg-navy-foreground/10 hover:bg-gold/20 flex items-center justify-center transition-colors business-hover-lift"
               >
                 <Instagram className="w-4 h-4 text-navy-foreground/70" />
               </a>
               <a
-                href="#"
-                aria-label="Twitter"
+                href="https://www.tiktok.com/@lev.tutors.hub"
+                aria-label="TikTok"
                 className="w-8 h-8 rounded-lg bg-navy-foreground/10 hover:bg-gold/20 flex items-center justify-center transition-colors business-hover-lift"
               >
-                <Twitter className="w-4 h-4 text-navy-foreground/70" />
+                <svg className="w-4 h-4 text-navy-foreground/70 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.06 3.43-.01 6.85-.02 10.28-.01 1.35-.3 2.77-1.1 3.88-1.18 1.73-3.39 2.62-5.45 2.41-2.06-.11-4.06-1.31-5.02-3.14-1.1-2.02-1.01-4.69.24-6.6 1.01-1.61 2.87-2.65 4.77-2.63.1 1.43.02 2.86.02 4.28-.84-.04-1.72.15-2.4.68-.84.62-1.2 1.73-1.01 2.75.14 1.05.97 1.96 2.01 2.18 1.18.28 2.51-.15 3.23-1.14.45-.6.57-1.36.55-2.1-.02-3.61-.01-7.22-.01-10.83.01-1.39.01-2.78.01-4.17Z"/></svg>
               </a>
             </div>
           </div>
