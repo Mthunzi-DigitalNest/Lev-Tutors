@@ -1,4 +1,4 @@
 User-Agent: *
 Allow: /
 
-Sitemap: https://levlearning.co.za/sitemap.xml
+Sitemap: https://levtutors.co.za/sitemap.xml
