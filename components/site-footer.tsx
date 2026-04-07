@@ -154,7 +154,15 @@ export function SiteFooter() {
             &copy; {new Date().getFullYear()} Lev Learning Hub Centre. All rights reserved.
           </p>
           <p className="text-xs text-navy-foreground/40">
-            Empowering learners across South Africa
+            Developed by{' '}
+            <a
+              href="https://mthunzidigitalnest.co.za/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-navy-foreground/50 hover:text-gold transition-colors"
+            >
+              Mthunzi DigitalNest
+            </a>
           </p>
         </div>
       </div>
