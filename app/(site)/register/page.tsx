@@ -267,7 +267,7 @@ export default function RegistrationPage() {
       <section className="relative bg-navy py-20 sm:py-24 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/hero-bg.jpg"
+            src="/images/classromm-3.jpg"
             alt="Students at Lev Learning Hub Centre"
             fill
             className="object-cover opacity-15"
@@ -311,7 +311,7 @@ export default function RegistrationPage() {
             <div className="lg:col-span-5">
               <div className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: '4/5' }}>
                 <Image
-                  src="/images/about-hero.jpg"
+                  src="/images/pic1.jpeg"
                   alt="Students studying at Lev Learning Hub Centre"
                   fill
                   className="object-cover"

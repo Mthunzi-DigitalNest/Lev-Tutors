@@ -144,9 +144,15 @@ export default function LearningFormatsPage() {
 
                 {/* Benefits */}
                 <div className={`rounded-2xl overflow-hidden border border-border bg-card ${idx % 2 === 1 ? 'lg:order-1' : ''}`}>
-                  <div className="relative h-52">
+                  <div className="relative h-52 flex">
                     <Image
-                      src={idx % 2 === 0 ? '/images/hero-bg.jpg' : '/images/about-hero.jpg'}
+                      src={
+                        idx === 0
+                          ? '/images/pic2.jpg'
+                          : idx === 1
+                          ? '/images/classroom-1.jpg'
+                          : '/images/classroom-2.jpg'
+                      }
                       alt={format.title}
                       fill
                       className="object-cover"
@@ -189,8 +195,8 @@ export default function LearningFormatsPage() {
               Format Comparison
             </h2>
           </div>
-          <div className="bg-card border border-border rounded-2xl overflow-hidden">
-            <table className="w-full">
+          <div className="bg-card border border-border rounded-2xl overflow-hidden overflow-x-auto">
+            <table className="w-full min-w-full">
               <thead>
                 <tr className="bg-primary text-primary-foreground">
                   <th className="text-left px-6 py-4 text-sm font-semibold">Feature</th>

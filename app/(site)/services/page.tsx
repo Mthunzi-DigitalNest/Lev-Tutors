@@ -109,7 +109,7 @@ export default function ServicesPage() {
       <section className="relative bg-navy py-24 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/hero-bg.jpg"
+            src="/images/pic2.jpg"
             alt="Lev Learning Hub Centre services"
             fill
             className="object-cover opacity-15"

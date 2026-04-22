@@ -1,3 +1,4 @@
+"use client";
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -14,13 +15,13 @@ import {
   Award,
 } from 'lucide-react'
 import { buildPageMetadata } from '@/lib/seo'
+import { useEffect, useState } from 'react'
 
-export const metadata: Metadata = buildPageMetadata({
-  title: 'Expert Tutors in Pretoria',
-  description:
-    'Lev Learning Hub Centre provides primary school, high school, varsity, and computer skills tutoring in Pretoria with centre-based, home, and online options.',
-  path: '/',
-})
+const heroImages = [
+  '/images/hero-bg.jpg',
+  '/images/classroom-1.jpg', // Place the first provided image here
+  '/images/classroom-2.jpg', // Place the second provided image here
+]
 
 const services = [
   {
@@ -128,19 +129,35 @@ const testimonials = [
 const aboutHeroImage = '/images/about-hero.jpg'
 
 export default function HomePage() {
+  // Background slider state
+  const [bgIndex, setBgIndex] = useState(0)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBgIndex((i) => (i + 1) % heroImages.length)
+    }, 5000) // 5 seconds per slide
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <main>
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-navy">
-        <div className="absolute inset-0">
-          <Image
-            src="/images/hero-bg.jpg"
-            alt="Students learning at Lev Learning Hub Centre"
-            fill
-            className="object-cover opacity-20"
-            priority
-          />
-        </div>
+        {/* Background slider images */}
+        {heroImages.map((src, i) => (
+          <div
+            key={src}
+            className={`absolute inset-0 transition-opacity duration-1000 ${i === bgIndex ? 'opacity-20 z-0' : 'opacity-0 z-0'}`}
+            aria-hidden="true"
+          >
+            <Image
+              src={src}
+              alt="Lev Learning Hub background"
+              fill
+              className="object-cover"
+              priority={i === 0}
+            />
+          </div>
+        ))}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-gold/20 border border-gold/30 rounded-full px-4 py-1.5 mb-6">
