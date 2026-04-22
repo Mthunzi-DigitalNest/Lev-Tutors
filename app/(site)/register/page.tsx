@@ -13,10 +13,33 @@ const grades = [
 ]
 
 const subjects = [
-  'Mathematics', 'Mathematical Literacy', 'English', 'Afrikaans', 'Physical Sciences',
-  'Life Sciences', 'Accounting', 'Business Studies', 'Economics', 'Geography',
-  'History', 'Computer Applications Technology', 'Statistics', 'Academic Writing',
+  'Mathematics',
+  'Mathematical Literacy',
+  'English',
+  'Afrikaans',
+  'Physical Sciences',
+  'Life Sciences',
+  'Accounting',
+  'Business Studies',
+  'Economics',
+  'Geography',
+  'History',
+  'Computer Applications Technology',
+  'Statistics',
+  'Academic Writing',
   'Computer Skills (General)',
+  'Algebra',
+  'Chemistry',
+  'Creative writing',
+  'CV Writing',
+  'English Vocabulary',
+  'Essay Writing',
+  'Geometry',
+  'Grammar',
+  'Reading',
+  'Spelling',
+  'Test prep',
+  'Trigonometry',
 ]
 
 const formats = ['Centre-Based', 'Home-to-Home', 'Online', 'Not Sure Yet']
