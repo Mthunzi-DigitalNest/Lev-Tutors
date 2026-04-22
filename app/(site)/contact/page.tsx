@@ -71,7 +71,7 @@ export default function ContactPage() {
 
               {/* Email */}
               <a
-                href="mailto:info@levlearning.co.za"
+                href="mailto:info@levtutors.co.za"
                 className="flex items-start gap-4 bg-card border border-border rounded-2xl p-5 hover:border-primary/50 hover:shadow-sm transition-all group"
               >
                 <div className="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-primary/15 transition-colors">
@@ -79,7 +79,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Email</p>
-                  <p className="font-semibold text-foreground group-hover:text-primary transition-colors">info@levlearning.co.za</p>
+                  <p className="font-semibold text-foreground group-hover:text-primary transition-colors">info@levtutors.co.za</p>
                 </div>
               </a>
 
@@ -177,7 +177,7 @@ export default function ContactPage() {
                 </a>
 
                 <a
-                  href="mailto:info@levlearning.co.za"
+                  href="mailto:info@levtutors.co.za"
                   className="bg-card border border-border rounded-2xl p-6 hover:border-primary/50 hover:shadow-md transition-all group"
                 >
                   <div className="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-colors">

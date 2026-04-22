@@ -124,8 +124,8 @@ export function SiteFooter() {
               </li>
               <li className="flex items-start gap-2.5">
                 <Mail className="w-4 h-4 text-gold mt-0.5 shrink-0" />
-                <a href="mailto:info@levlearning.co.za" className="text-sm text-navy-foreground/70 hover:text-gold transition-colors business-hover-lift">
-                  info@levlearning.co.za
+                <a href="mailto:info@levtutors.co.za" className="text-sm text-navy-foreground/70 hover:text-gold transition-colors business-hover-lift">
+                  info@levtutors.co.za
                 </a>
               </li>
               <li className="flex items-start gap-2.5">

@@ -75,11 +75,11 @@ export default function ThankYouPage() {
                 067 027 9825
               </a>
               <a
-                href="mailto:info@levlearning.co.za"
+                href="mailto:info@levtutors.co.za"
                 className="inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
               >
                 <Mail className="w-4 h-4 text-primary" />
-                info@levlearning.co.za
+                info@levtutors.co.za
               </a>
             </div>
           </div>
