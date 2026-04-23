@@ -44,7 +44,7 @@ export function SiteFooter() {
             </p>
             <div className="flex items-center justify-center gap-3">
               <a
-                href="https://www.facebook.com/share/18S1HPv9No/?mibextid=wwXIfr"
+                href="https://www.facebook.com/share/1Ke8NMpgkF/?mibextid=wwXIfr"
                 aria-label="Facebook"
                 className="w-8 h-8 rounded-lg bg-navy-foreground/10 hover:bg-gold/20 flex items-center justify-center transition-colors business-hover-lift"
               >
